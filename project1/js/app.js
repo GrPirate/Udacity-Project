@@ -124,7 +124,7 @@ function matchSuccess(classname) {
         var $childClass = $(this).children().attr("class");
         if ($childClass === classname) {
             $(this).attr("class", "card match");
-            $(this).animateCss("pulse");
+            $(this).animateCss("bounceOut");
         }
     })
     selectedCrads = [];
@@ -139,11 +139,9 @@ function matchSuccess(classname) {
 function matchFailure(arr) {
     $(".card").each(function () {
         var $me=$(this);
-        if ($me.hasClass("open")) {
-            $me.addClass("fail");
-            $me.animateCss("tada",function(){
-                $me.removeClass("fail")
-            });
+        if ($(this).hasClass("open")) {
+            $(this).addClass("fail");
+            $(this).animateCss("shake");
         }
     })
     setTimeout(function () {
@@ -185,8 +183,8 @@ function timerEnd(id) {
 
 /**
  * TODO:
- * 1、增加CSS动画
+ * 1、增加CSS动画(已解决)
  * 2、得分等级
  * 3、全部匹配后的模态框提示
- * 4、卡片存储问题
+ * 4、卡片存储问题(已解决)
  */
