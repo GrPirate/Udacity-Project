@@ -83,7 +83,7 @@ h1 {
     font-size: 33px;
 }
 
-.deck .card.fail{
+.deck .card.fail {
     background-color: red !important;
 }
 
@@ -105,7 +105,8 @@ h1 {
     margin: 0 5px 0 0;
 }
 
-.score-panel .stars li {
+.score-panel .stars li,
+.pass .stars li {
     list-style: none;
     display: inline-block;
 }
@@ -121,4 +122,46 @@ h1 {
 
 .score-panel .matchs {
     margin-left: 100px;
+}
+
+
+/*
+ * Congratulation
+ */
+
+.pass {
+    color: gray;
+    position: fixed;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 9;
+    top: 0;
+    height: 1000px;
+}
+
+.pass .congratulate {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.pass .stars {
+    margin: 290px 0 0;
+    font-size: 80px;
+    padding-left: 0;
+    color: red;
+}
+
+.pass .again {
+    width: 380px;
+    height: 100px;
+    font-size: 50px;
+    background: #01E91C;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
 }

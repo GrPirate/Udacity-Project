@@ -69,8 +69,10 @@ function shuffle(array) {
  * 重置卡片
  */
 function resetting() {
+    resetStar();
     timeStarFlag = 0;
     $(".moves").html(0);
+    moveNum = 0;
     timerEnd(timeId);
     cards = shuffle(cards);
     deal();
@@ -130,6 +132,9 @@ function matchSuccess(classname) {
     selectedCrads = [];
     $(".moves").html(++moveNum);
     successNum++;
+    if (successNum === 8) {
+        complete();
+    }
 }
 
 /**
@@ -138,7 +143,7 @@ function matchSuccess(classname) {
  */
 function matchFailure(arr) {
     $(".card").each(function () {
-        var $me=$(this);
+        var $me = $(this);
         if ($(this).hasClass("open")) {
             $(this).addClass("fail");
             $(this).animateCss("shake");
@@ -167,6 +172,9 @@ function matchFailure(arr) {
 function timerStar() {
     return setInterval(function () {
         seconds++;
+        if (seconds === 30 || seconds === 45 || seconds === 60) {
+            removeStar();
+        }
         $(".timers").html(seconds);
     }, 1000);
 }
@@ -181,10 +189,39 @@ function timerEnd(id) {
     $(".timers").html(0);
 }
 
+function complete() {
+    $(".pass").show();
+    clearInterval(timeId);
+    var congratulation = moveNum + " moves," + seconds + " seconds,Congratulations!"
+    $("#sucess-star").animateCss("fadeInDown")
+    $(".congratulate").html(congratulation);
+    $(".congratulate").animateCss("bounceIn");
+}
+
+function tryAgain() {
+    resetting()
+    $(".pass").hide();
+}
+
+/**
+ * 移除星星
+ */
+function removeStar() {
+    $(".stars li:first").remove();
+    $(".stars li:last").remove();
+}
+
+/**
+ * 重置星星
+ */
+function resetStar() {
+    $(".stars").empty();
+    $(".stars").append("<li><i class=\"fa fa-star\"></i></li><li><i class=\"fa fa-star\"></i></li><li><i class=\"fa fa-star\"></i></li>")
+}
 /**
  * TODO:
  * 1、增加CSS动画(已解决)
- * 2、得分等级
- * 3、全部匹配后的模态框提示
+ * 2、得分等级(已解决)
+ * 3、全部匹配后的模态框提示(已解决)
  * 4、卡片存储问题(已解决)
  */
