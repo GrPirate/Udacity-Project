@@ -1,13 +1,63 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
+
 <body>
+    <div class="start pass">
+        <label>玩家名称：</label>
+        <input type="text" id="playerName" placeholder="请输入名称">
+        <ul class="ul-player">
+            <li class="player">
+                <img src="images/char-boy.png" alt="">
+            </li>
+            <li class="player">
+                <img src="images/char-cat-girl.png" alt="">
+            </li>
+            <li class="player">
+                <img src="images/char-horn-girl.png" alt="">
+            </li>
+            <li class="player">
+                <img src="images/char-pink-girl.png" alt="">
+            </li>
+            <li class="player">
+                <img src="images/char-princess-girl.png" alt="">
+            </li>
+        </ul>
+    </div>
+    <div class="pass" id="suc" style="display:none">
+        <table class="rank">
+            <thead>
+                <tr>
+                    <th>名次</th>
+                    <th>玩家</th>
+                    <th>时间/s</th>
+                </tr>
+            </thead>
+            <tbody id="bodyrank">
+                <tr>
+                    <td>1</td>
+                    <td>play</td>
+                    <td>34</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="congratulate">
+            Great!!!
+        </div>
+        <button class="again" onclick="playAgain()">Play Again</button>
+    </div>
     <script src="js/resources.js"></script>
+    <script src="js/rank.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
+
+
 </body>
+
 </html>

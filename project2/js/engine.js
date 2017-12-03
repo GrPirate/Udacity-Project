@@ -9,8 +9,8 @@
  * 这个引擎是可以通过 Engine 变量公开访问的，而且它也让 canvas context (ctx) 对象也可以
  * 公开访问，以此使编写app.js的时候更加容易
  */
-
-var Engine = (function(global) {
+var stop = false;
+var Engine = (function (global) {
     /* 实现定义我们会在这个作用于用到的变量
      * 创建 canvas 元素，拿到对应的 2D 上下文
      * 设置 canvas 元素的高/宽 然后添加到dom中
@@ -22,7 +22,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 505;
-    canvas.height = 606;
+    canvas.height = 752;
     doc.body.appendChild(canvas);
 
     /* 这个函数是整个游戏的主入口，负责适当的调用 update / render 函数 */
@@ -46,16 +46,20 @@ var Engine = (function(global) {
         /* 在浏览准备好调用重绘下一个帧的时候，用浏览器的 requestAnimationFrame 函数
          * 来调用这个函数
          */
-        win.requestAnimationFrame(main);
+        if (!player.success) {
+            win.requestAnimationFrame(main);
+        }else{
+            clearInterval(timeId);
+            Rank.load(name,time);
+            $("#suc").show();
+        }
     }
 
     /* 这个函数调用一些初始化工作，特别是设置游戏必须的 lastTime 变量，这些工作只用
      * 做一次就够了
      */
     function init() {
-        reset();
-        lastTime = Date.now();
-        main();
+        
     }
 
     /* 这个函数被 main 函数（我们的游戏主循环）调用，它本身调用所有的需要更新游戏角色
@@ -65,7 +69,8 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+        clearLeavedEnemy();
     }
 
     /* 这个函数会遍历在 app.js 定义的存放所有敌人实例的数组，并且调用他们的 update()
@@ -73,12 +78,37 @@ var Engine = (function(global) {
      * 这些更新函数应该只聚焦于更新和对象相关的数据/属性。把重绘的工作交给 render 函数。
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.update(dt);
         });
-        // player.update();
+        player.update();
     }
 
+    /**
+     * 碰撞检测
+     */
+    function checkCollisions() {
+        allEnemies.forEach(function (enemy) {
+            player.collisions(enemy.x, enemy.y);
+        });
+        // if (player.collided) {
+        //     stop=true;
+        // }
+    }
+
+    /**
+     * 从allEnemies中移除已经离开画布的敌人
+     */
+    function clearLeavedEnemy() {
+        var cnt = 0;
+        for (let i = 0, len = allEnemies.length; i < len; i++)
+            if (!allEnemies[i].leaved) {
+                allEnemies[cnt++] = allEnemies[i];
+            }
+        while(allEnemies.length>cnt){
+            allEnemies.pop();
+        }
+    }
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
      * 在每个游戏的时间间隙都会被调用一次（或者说游戏引擎的每个循环），因为这就是游戏
      * 怎么工作的，他们就像是那种每一页上都画着不同画儿的书，快速翻动的时候就会出现是
@@ -87,14 +117,16 @@ var Engine = (function(global) {
     function render() {
         /* 这个数组保存着游戏关卡的特有的行对应的图片相对路径。 */
         var rowImages = [
-                'images/water-block.png',   // 这一行是河。
-                'images/stone-block.png',   // 第一行石头
-                'images/stone-block.png',   // 第二行石头
-                'images/stone-block.png',   // 第三行石头
-                'images/grass-block.png',   // 第一行草地
-                'images/grass-block.png'    // 第二行草地
+                'images/water-block.png', // 这一行是河。
+                'images/stone-block.png', // 第一行石头
+                'images/stone-block.png', // 第二行石头
+                'images/stone-block.png', // 第三行石头
+                'images/stone-block.png', // 第四行石头
+                'images/stone-block.png', // 第五行石头
+                'images/grass-block.png', // 第一行草地
+                'images/grass-block.png' // 第二行草地
             ],
-            numRows = 6,
+            numRows = 8,
             numCols = 5,
             row, col;
 
@@ -117,7 +149,7 @@ var Engine = (function(global) {
      */
     function renderEntities() {
         /* 遍历在 allEnemies 数组中存放的作于对象然后调用你事先定义的 render 函数 */
-        allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function (enemy) {
             enemy.render();
         });
 
@@ -129,9 +161,12 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
-        // 空操作
+        lastTime = Date.now();
+        player.reset();
+        allEnemies=[];
+        main();
     }
-
+    
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
      * 那么党这些图片都已经加载完毕的时候游戏就会开始。
      */
@@ -140,7 +175,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png'
     ]);
     Resources.onReady(init);
 
@@ -148,4 +187,5 @@ var Engine = (function(global) {
      * 对象。从而开发者就可以在他们的app.js文件里面更容易的使用它。
      */
     global.ctx = ctx;
+    global.reset = reset;
 })(this);
