@@ -10,8 +10,11 @@
 
 <body>
     <div class="start pass">
-        <label>玩家名称：</label>
-        <input type="text" id="playerName" placeholder="请输入名称">
+        <div class="input-play">
+            <label>玩家昵称：</label>
+            <input type="text" id="playerName" placeholder="请输入昵称">
+        </div>
+        <p class="game-title">选择你的英雄开始游戏吧！</p>
         <ul class="ul-player">
             <li class="player">
                 <img src="images/char-boy.png" alt="">
@@ -31,24 +34,28 @@
         </ul>
     </div>
     <div class="pass" id="suc" style="display:none">
-        <table class="rank">
-            <thead>
-                <tr>
-                    <th>名次</th>
-                    <th>玩家</th>
-                    <th>时间/s</th>
-                </tr>
-            </thead>
-            <tbody id="bodyrank">
-                <tr>
-                    <td>1</td>
-                    <td>play</td>
-                    <td>34</td>
-                </tr>
-            </tbody>
-        </table>
+
         <div class="congratulate">
             Great!!!
+        </div>
+        <div>
+            <label class="table-title">排行榜</label>
+            <table class="rank">
+                <thead>
+                    <tr>
+                        <th>名次</th>
+                        <th>玩家</th>
+                        <th>时间/s</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyrank">
+                    <tr>
+                        <td>1</td>
+                        <td>play</td>
+                        <td>34</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <button class="again" onclick="playAgain()">Play Again</button>
     </div>

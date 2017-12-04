@@ -91,9 +91,6 @@ var Engine = (function (global) {
         allEnemies.forEach(function (enemy) {
             player.collisions(enemy.x, enemy.y);
         });
-        // if (player.collided) {
-        //     stop=true;
-        // }
     }
 
     /**

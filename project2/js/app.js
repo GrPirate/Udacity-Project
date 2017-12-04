@@ -107,6 +107,7 @@ class Player {
 // 把玩家对象放进一个叫 player 的变量里面
 var allEnemies = [],player,name,time=0,timeId;
 
+// 1或2秒随机生成敌方单位
 setInterval(function () {
     let enemy = new Enemy(0, 56 + (Math.floor(Math.random() * 5) * 83));
 
