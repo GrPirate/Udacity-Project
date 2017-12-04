@@ -1,7 +1,21 @@
 
-前端纳米学位街机游戏克隆项目
-===============================
+# 街机游戏克隆项目
 
-学生应该用这个[评审标准](https://review.udacity.com/#!/rubrics/499/view))来自我检查自己提交的代码。 确认自己写的函数要是**面向对象的** -  要么是类函数（就像函数 Player 和 Enemy）要么是类的原型链上的函数比如 Enemy.prototype.checkCollisions ， 在类函数里面或者类的原型链函数里面适当的使用关键词 'this' 来引用调用该函数的对象实例。最后保证你的**readme.md**文件要写明关于如何运行和如何玩你的街机游戏的指引。
+> 该项目是一个基于canvas的模仿青蛙过河的一个小游戏
 
-关于如何开始这个项目的更详细的指导，可以查阅这份[指南](https://gdgdocs.org/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true)。
+# 技术栈
+- canvas
+- JavaScript面向对象编程（使用class创建Player和Enemy）
+
+# 运行游戏
+将项目下载下来，直接使用浏览器打开index.html即可
+
+# 游戏玩法
+1. 输入玩家昵称
+2. 选择你喜欢的角色开始游戏
+3. 使用使用上下左右操作角色躲过敌人到达对岸即可通关
+4. 通关会记录玩家昵称和通关时间，并进入排行榜
+5. 点击playAgain按钮可重新开始游戏
+
+# 项目预览
+_[https://grpirate.github.io/Personality/Frogger/](https://grpirate.github.io/Personality/Frogger/)_
