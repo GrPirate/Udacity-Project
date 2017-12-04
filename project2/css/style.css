@@ -1,14 +1,14 @@
 body {
     text-align: center;
     background: black;
-
 }
+
 
 /*
  * Congratulation
  */
 
- .pass {
+.pass {
     color: #f1ecec;
     position: fixed;
     display: flex;
@@ -29,7 +29,6 @@ body {
     color: darkviolet;
 }
 
-
 .pass .again {
     margin-top: 10px;
     width: 137px;
@@ -41,52 +40,61 @@ body {
     cursor: pointer;
     color: white;
 }
+
+
 /*表格样式*/
+
 table.rank {
     width: 400px;
-	font-family: verdana,arial,sans-serif;
-	font-size:11px;
-	color:#333333;
-	border-width: 1px;
-	border-color: #666666;
-	border-collapse: collapse;
+    font-family: verdana, arial, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
 }
+
 table.rank th {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #dedede;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
 }
+
 table.rank td {
-	border-width: 1px;
-	padding: 8px;
-	border-style: solid;
-	border-color: #666666;
-	background-color: #ffffff;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
 }
-.table-title{
+
+.table-title {
     color: lightseagreen;
     font-size: 28px;
     font-family: cursive;
     font-weight: bolder;
 }
+
+
 /*玩家列表*/
-.ul-player{
+
+.ul-player {
     list-style-type: none;
     display: flex;
 }
 
-.ul-player .player{
+.ul-player .player {
     cursor: pointer;
 }
 
-.start{
+.start {
     background: black;
     padding-top: 200px;
 }
 
-.input-play input{
+.input-play input {
     height: 30px;
     line-height: 30px;
     padding-left: 10px;
@@ -94,7 +102,7 @@ table.rank td {
     box-shadow: 0 0 31px red, 2px 2px 10px 12px yellow, 4px 4px 12px 12px green;
 }
 
-.game-title{
+.game-title {
     margin-top: 50px;
     text-shadow: red 0 1px 0;
     font-size: 20px;

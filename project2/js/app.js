@@ -13,14 +13,14 @@ class Enemy {
         // this.speed = 100;
         // 敌人的图片或者雪碧图，用一个我们提供的工具函数来轻松的加载文件
         this.sprite = 'images/enemy-bug.png';
-        this.leaved=false;// 是否离开画布
+        this.leaved = false; // 是否离开画布
     }
     // 此为游戏必须的函数，用来更新敌人的位置
     // 参数: dt ，表示时间间隙
     update(dt) {
         // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
         // 都是以同样的速度运行的
-        this.x >= 5*UNIT_WIDTH ? this.leaved =true : this.x += dt * this.speed;
+        this.x >= 5 * UNIT_WIDTH ? this.leaved = true : this.x += dt * this.speed;
     }
     // 此为游戏必须的函数，用来在屏幕上画出敌人，
     render() {
@@ -37,7 +37,7 @@ class Player {
         this.y = y;
         this.hero = hero;
         this.collided = false;
-        this.success=false;
+        this.success = false;
     }
 
     update(dx = 0, dy = 0) {
@@ -59,8 +59,8 @@ class Player {
         if (this.y > 6 * UNIT_Height + 56) {
             this.y = 6 * UNIT_Height + 56;
         }
-        if(this.y==56 - UNIT_Height){
-            this.success=true;
+        if (this.y == 56 - UNIT_Height) {
+            this.success = true;
         }
     }
 
@@ -75,10 +75,10 @@ class Player {
     }
     // 碰撞检测
     collisions(enemyX, enemyY) {
-        if (this.y == enemyY && ((this.x < enemyX + UNIT_WIDTH && this.x > enemyX)||(this.x < enemyX && this.x > enemyX - UNIT_WIDTH))) {
-            this.collided=true;
-            console.log('enemy: ',enemyX, enemyY);
-            console.log('player: ',this.x, this.y);
+        if (this.y == enemyY && ((this.x < enemyX + UNIT_WIDTH && this.x > enemyX) || (this.x < enemyX && this.x > enemyX - UNIT_WIDTH))) {
+            this.collided = true;
+            console.log('enemy: ', enemyX, enemyY);
+            console.log('player: ', this.x, this.y);
             this.reset();
         }
     }
@@ -105,7 +105,9 @@ class Player {
 // 现在实例化你的所有对象
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
-var allEnemies = [],player,name,time=0,timeId;
+var allEnemies = [],
+    player, name, time = 0,
+    timeId;
 
 // 1或2秒随机生成敌方单位
 setInterval(function () {
@@ -118,25 +120,26 @@ setInterval(function () {
 player = new Player(Math.floor(Math.random() * 5) * UNIT_WIDTH, 56 + (5 + Math.round(Math.random())) * UNIT_Height, "images/char-boy.png")
 
 
-$(".player").click(function(){
-    let playImg=$(this).children().attr("src");
+$(".player").click(function () {
+    let playImg = $(this).children().attr("src");
     player = new Player(Math.floor(Math.random() * 5) * UNIT_WIDTH, 56 + (5 + Math.round(Math.random())) * UNIT_Height, playImg);
     reset();
-    name=$("#playerName").val()==""?"玩家":$("#playerName").val();
+    name = $("#playerName").val() == "" ? "玩家" : $("#playerName").val();
     $(".start").hide();
-    timeId=keeyTimeStart();
+    timeId = keeyTimeStart();
 })
-function keeyTimeStart(){
-    return setInterval(function(){
+
+function keeyTimeStart() {
+    return setInterval(function () {
         time++;
-    },1000)
+    }, 1000)
 }
 
-function playAgain(){
+function playAgain() {
     $(".start").show();
     $("#suc").hide();
     $("#playerName").val("");
-    time=0;
+    time = 0;
 }
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
