@@ -25,27 +25,48 @@ $(function() {
         /* TODO:
          * 编写一个测试遍历 allFeeds 对象里面的所有的源来保证有链接字段而且链接不是空的。
          */
-
-
+        it('allFeeds url exist', function () {
+            allFeeds.forEach(function (val, key) {
+                expect(val.url).toBeDefined();
+                expect(val.url).not.toBeNull();
+            });
+        });
+        
         /* TODO:
          * 编写一个测试遍历 allFeeds 对象里面的所有的源来保证有名字字段而且不是空的。
          */
+        it('allFeeds name exist', function () {
+            allFeeds.forEach(function (val, key) {
+                expect(val.name).toBeDefined();
+                expect(val.name).not.toBeNull();
+            });
+        });
     });
 
 
     /* TODO: 写一个叫做 "The menu" 的测试用例 */
 
+    describe('The menu', function () {
+      
         /* TODO:
          * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
 
-         /* TODO:
-          * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
-          * 测试应该包含两个 expectation ： 党点击图标的时候菜单是否显示，
-          * 再次点击的时候是否隐藏。
-          */
-
+        it('is hiden', function () {
+            expect($("body").hasClass("menu-hidden")).toBe(true);
+        });
+        /* TODO:
+         * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
+         * 测试应该包含两个 expectation ： 党点击图标的时候菜单是否显示，
+         * 再次点击的时候是否隐藏。
+         */
+        it('click to be toggle', function () {
+            
+            
+        })
+  
+    });
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
 
         /* TODO:
