@@ -1,6 +1,6 @@
 # 订阅阅读测试
 
-> 这是一个学习使用jasmine进行自动化测试的项目，最近刚学习了前端自动化构建，所以在该项目中我加入了**[gulp](https://www.gulpjs.com.cn/)**和**[browserify](http://browserify.org/)**前端自动化构建工具来学习使用
+> 这是一个学习使用jasmine进行自动化测试的项目，最近刚学习了前端自动化构建，所以在该项目中我加入了[gulp](https://www.gulpjs.com.cn/)和[browserify](http://browserify.org/)前端自动化构建工具来学习使用
 
 ## 运行步骤
 
@@ -12,7 +12,7 @@ git clone git@github.com:GrPirate/Udacity-Project.git
 
 进入项目目录
 ```
-cd project3
+cd udacity-project/project3
 ```
 
 安装依赖
@@ -21,7 +21,7 @@ cd project3
 npm install
 ```
 
-运行开发环境：可监听文件的变化,执行命令后自动打开浏览器
+运行开发环境：可监听文件的变化,执行命令后在浏览器中打开index.html文件
 ```
 npm run dev
 ```
