@@ -13,4 +13,9 @@
 - 效果预览：[https://grpirate.github.io/Personality/Frogger](https://grpirate.github.io/Personality/Frogger)
 
 
+## 项目三：订阅阅读器测试
+
+- 项目地址：[project3](https://github.com/GrPirate/Udacity-Project/tree/master/project3)
+
+
 
