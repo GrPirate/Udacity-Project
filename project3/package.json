@@ -1,0 +1,27 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "learn jasmine ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "gulp --env development",
+    "prod": "gulp --env production",
+    "start": "http-server -o"
+  },
+  "author": "Grpirate",
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^14.5.0",
+    "gulp": "^3.9.1",
+    "gulp-if": "^2.0.2",
+    "gulp-uglify": "^3.0.0",
+    "http-server": "^0.10.0",
+    "minimist": "^1.2.0",
+    "run-sequence": "^2.2.0",
+    "shelljs": "^0.7.8",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.9.0"
+  }
+}

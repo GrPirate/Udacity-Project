@@ -6,7 +6,7 @@
 /* 我们把所有的测试都放在了 $() 函数里面。因为有些测试需要 DOM 元素。
  * 我们得保证在 DOM 准备好之前他们不会被运行。
  */
-$(function() {
+module.exports = $(function() {
     /* 这是我们第一个测试用例 - 其中包含了一定数量的测试。这个用例的测试
      * 都是关于 Rss 源的定义的，也就是应用中的 allFeeds 变量。
     */
@@ -62,13 +62,16 @@ $(function() {
          * 再次点击的时候是否隐藏。
          */
         it('click to be toggle', function () {
-            
-            
+            $(".menu-icon-link").click();
+            expect($("body").hasClass("menu-hidden")).not.toBe(true);
+            $(".menu-icon-link").click();
+            expect($("body").hasClass("menu-hidden")).toBe(true);
         })
   
     });
     /* TODO: 13. 写一个叫做 "Initial Entries" 的测试用例 */
-
+    describe('Initial Entries',function(){
+        
         /* TODO:
          * 写一个测试保证 loadFeed 函数被调用而且工作正常，即在 .feed 容器元素
          * 里面至少有一个 .entry 的元素。
@@ -76,11 +79,33 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个而是应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
+        beforeEach(function(done){
+            loadFeed(0,function(){
+                done();
+            })
+        });
+        it('Asyn test',function(done){
+            expect($(".feed").children()).toBeDefined();
+            done();
+        })
+    });
 
     /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
-
+    describe('New Feed Selection',function(){
+        var preTitle=$('.header-title').html();
+        
         /* TODO:
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+        beforeEach(function(done){
+            loadFeed(1,function(){
+                done();
+            })
+        });
+        it('Selection test',function(done){
+            expect($('.header-title').html()).not.toBe(preTitle);
+            done();
+        })
+    });
 }());
