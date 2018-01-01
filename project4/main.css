@@ -7,6 +7,9 @@ body{
 .navbar {
     border-radius: 0;
     margin-bottom: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
 }
 
 .map-sider {
