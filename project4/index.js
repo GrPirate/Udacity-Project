@@ -1,3 +1,5 @@
+var vm = new AppViewModel();
+
 /**
  * 显示地图
  */
@@ -103,6 +105,7 @@ info.open(map, marker.getPosition())*/
 
 var marker = new Array();
 var windowsArr = new Array();
+var placeSearch;
 
 AMap.service('AMap.PlaceSearch', function () {
     placeSearch = new AMap.PlaceSearch({
@@ -111,13 +114,18 @@ AMap.service('AMap.PlaceSearch', function () {
         city: "武汉"
     });
 })
-placeSearch.searchNearBy('', [114.337611,30.487903], 500,function (status, result) {
-    if (status === 'complete' && result.info === 'OK') {
-        // keywordSearch_CallBack(result);
-        console.log(status, result);
-        search_callback(result);
-    }
-});
+search();
+function search(key = '') {
+    placeSearch.searchNearBy(key, [114.337611, 30.487903], 500, function (status, result) {
+        if (status === 'complete' && result.info === 'OK') {
+            // keywordSearch_CallBack(result);
+            console.log(status, result);
+            search_callback(result);
+            vm.list = result.poiList.pois;
+            ko.applyBindings(vm);
+        }
+    });
+}
 
 /**
  * 查询回调方法
@@ -173,4 +181,13 @@ function parseStr(p) {
         p = "暂无";
     }
     return p;
+}
+
+/**
+ * knockoutJs部分
+ */
+
+
+function AppViewModel() {
+    this.list = ko.observableArray([])
 }
