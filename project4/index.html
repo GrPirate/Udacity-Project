@@ -32,13 +32,13 @@
   <div class="container-fluid">
     <div class="map-sider">
       <div>
-        <input type="email" class="form-control" id="inputEmail3" placeholder="input">
+        <input type="email" class="form-control" id="inputEmail3" placeholder="input" data-bind="textInput: placeName">
         <span class="glyphicon glyphicon-search map-search" aria-hidden="true"></span>
       </div>
 
       <div class="list-group map-content-list" id="listid">
         <!-- ko foreach: list -->
-        <a href="#" class="list-group-item">
+        <a href="#" class="list-group-item" data-bind="click: function(data,e){showMakerByIndex(data,e,$index)}">
           <h4 class="list-group-item-heading" data-bind="text:name"></h4>
           <p class="list-group-item-text" data-bind="text:address"></p>
         </a>

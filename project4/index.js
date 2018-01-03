@@ -1,5 +1,6 @@
 var vm = new AppViewModel();
 
+ko.applyBindings(vm);
 /**
  * 显示地图
  */
@@ -25,85 +26,10 @@ AMap.plugin(['AMap.ToolBar', 'AMap.Scale'],
  * Market和信息窗体
  */
 
-/*var markers = [];
-var infoWindow = new AMap.InfoWindow({
-    offset: new AMap.Pixel(0, -22)
-});
-
-// 给每个省添加marker
-for (let i = 0, len = provinces.length; i < len; i++) {
-    let marker;
-    if (provinces[i].type === 0) {
-        let icon = new AMap.Icon({
-            img: 'https://vdata.amap.com/icons/b18/1/2.png',
-            siza: new AMap.Size(24, 24)
-        });
-        marker = new AMap.Marker({
-            icon: icon,
-            // offset: new AMap.Pixel(-12,-12),
-            position: provinces[i].center.split(','),
-            title: provinces[i].name,
-            zIndex: 101,
-            map: map
-        })
-    } else{
-        marker = new AMap.Marker({
-            position: provinces[i].center.split(','),
-            title: provinces[i].name,
-            map: map
-        });
-
-        if(provinces[i].type === 2){
-            let content = "<div class='taiwan'>宝岛台湾</div>";
-            let baodao = new AMap.Marker({
-                content: content,
-                position: provinces[i].center.split(','),
-                title: provinces[i].name,
-                map: map
-            })
-        }
-    }
-    marker.content = "I am " + provinces[i].name;
-    marker.on('click', markerClick);
-    markers.push(marker);
-}
-
-map.setFitView();*/
-
-/**
- * 点击标记显示详细信息
- * @param {*} e 
- */
-/*function markerClick(e) {
-    infoWindow.setContent(e.target.content);
-    infoWindow.open(map, e.target.getPosition());
-}*/
-
-/**
- * 信息窗体
- */
-/*var marker = new AMap.Marker({
-    position: [116.480983, 39.989628],
-    map: map
-});
-// marker.setMap(map);
-var circle = new AMap.Circle({
-    center: [116.480983, 39.989628],
-    radius: 100,
-    fillOpacity: 0.2,
-    strokeWeight: 1,
-    map: map
-})
-// circle.setMap(map);
-map.setFitView();
-var info = new AMap.InfoWindow({
-    content: "信息窗体<br>这里是方恒科技大厦",
-    offset: new AMap.Pixel(0, -28)
-});
-info.open(map, marker.getPosition())*/
 
 
-var marker = new Array();
+
+var markers = new Array();
 var windowsArr = new Array();
 var placeSearch;
 
@@ -121,8 +47,7 @@ function search(key = '') {
             // keywordSearch_CallBack(result);
             console.log(status, result);
             search_callback(result);
-            vm.list = result.poiList.pois;
-            ko.applyBindings(vm);
+            vm.list(result.poiList.pois);
         }
     });
 }
@@ -132,10 +57,15 @@ function search(key = '') {
  * @param {*ArrayList} data 
  */
 function search_callback(data) {
+    map.remove(markers);
+    windowsArr = [];
+    markers = [];
     var poiArr = data.poiList.pois;
     var resultCount = poiArr.length;
     for (var i = 0; i < resultCount; i++) {
-        addmarker(i, poiArr[i]);
+        var mar = addmarker(i, poiArr[i]);
+        markers.push(mar);
+        AMap.event.addListener(mar, 'click', _onClick);
     }
     map.setFitView();
 }
@@ -150,7 +80,6 @@ function addmarker(i, d) {
         topWhenMouseOver: true
     };
     var mar = new AMap.Marker(markerOption);
-    marker.push([lngX, latY]);
 
     var infoWindow = new AMap.InfoWindow({
         content: "<h3><font color=\"#00a6ac\">  " + (i + 1) + ". " + d.name + "</font></h3>" + createContent(d.type, d.address, d.tel),
@@ -158,10 +87,12 @@ function addmarker(i, d) {
         offset: new AMap.Pixel(0, -30)
     });
     windowsArr.push(infoWindow);
-    var aa = function (e) {
+    var openInfoWindow = function (e) {
         infoWindow.open(map, mar.getPosition());
     };
-    mar.on("mouseover", aa);
+    mar.on("mouseover", openInfoWindow);
+    mar.on("mouseout", () => infoWindow.close());
+    return mar;
 }
 
 
@@ -189,5 +120,44 @@ function parseStr(p) {
 
 
 function AppViewModel() {
-    this.list = ko.observableArray([])
+    this.list = ko.observableArray([]);
+
+    this.updated
+    this.placeName=ko.pureComputed({
+        read: function () {
+            return "";
+        },
+        write: function (value) {
+            search(value);
+        },
+        owner: this
+    });
+
+    // this.showDetail = function (data,e) {
+    //     // showMakerByIndex(idx);
+    //     console.log(data,e);
+    // }
+}
+
+
+AMap.event.addListener(map, 'zoomend', _onZoomEnd);
+
+function _onZoomEnd(e) {
+    if (map.getZoom() < 16) {
+        map.add(markers);
+    }
+}
+
+
+function _onClick(e) {
+    map.remove(markers);
+    map.add(e.target);
+    map.setFitView(e.target);
+}
+
+function showMakerByIndex(data,e) {
+    console.log(data,e);
+    // map.remove(markers);
+    // map.add(markers[idx]);
+    // map.setFitView(markers[idx]);
 }

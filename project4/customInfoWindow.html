@@ -1,165 +1,101 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>自定义样式信息窗体</title>
-    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
     <style type="text/css">
-        .info {
+        body,
+        html,
+        #container {
+            height: 100%;
+            margin: 0px;
+            font: 12px Arial;
+        }
+
+        .circle {
+            border-radius: 6px;
             border: solid 1px silver;
-        }
-        div.info-top {
-            position: relative;
-            background: none repeat scroll 0 0 #F9F9F9;
-            border-bottom: 1px solid #CCC;
-            border-radius: 5px 5px 0 0;
-        }
-        div.info-top div {
-            display: inline-block;
-            color: #333333;
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 31px;
-            padding: 0 10px;
-        }
-        div.info-top img {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            transition-duration: 0.25s;
-        }
-        div.info-top img:hover {
-            box-shadow: 0px 0px 5px #000;
-        }
-        div.info-middle {
-            font-size: 12px;
-            padding: 6px;
-            line-height: 20px;
-        }
-        div.info-bottom {
-            height: 0px;
-            width: 100%;
-            clear: both;
+            width: 35px;
+            height: 16px;
+            padding: 3px;
             text-align: center;
-        }
-        div.info-bottom img {
-            position: relative;
-            z-index: 104;
-        }
-        span {
-            margin-left: 5px;
-            font-size: 11px;
-        }
-        .info-middle img {
-            float: left;
-            margin-right: 6px;
+            line-height: 18px;
+            max-width: 50px;
+            color: white;
         }
     </style>
-    <script type="text/javascript"
-            src="https://webapi.amap.com/maps?v=1.4.3&key=c54f5c8c3489d46cf0c9bb6cf15822ee"></script>
-   
+    <title>Marker example</title>
 </head>
+
 <body>
-<div id="container"></div>
-<div id="tip">点击地图上的点标记，打开所添加的自定义信息窗体</div>
-<script type="text/javascript">
-	//地图初始化时，在地图上添加一个marker标记,鼠标点击marker可弹出自定义的信息窗体
-    var map = new AMap.Map("container", {
-        resizeEnable: true,
-        center: [116.481181, 39.989792],
-        zoom: 16
-    });    
-    addMarker();
-    //添加marker标记
-    function addMarker() {
-        map.clearMap();
-        var marker = new AMap.Marker({
-            map: map,
-            position: [116.481181, 39.989792]
+    <div id="container" tabindex="0"></div>
+    <script src="https://webapi.amap.com/js/marker2.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.2&key=您申请的key值"></script>
+    <script type="text/javascript">
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            zoom: 5,
+            zooms: [4, 18],
+            center: [106.485352, 34.603692]
         });
-        //鼠标点击marker弹出自定义的信息窗体
-        AMap.event.addListener(marker, 'click', function() {
-            infoWindow.open(map, marker.getPosition());
-        });
-    }
+        var createMarker = function (data, hide) {
+            var div = document.createElement('div');
+            div.className = 'circle';
+            var r = Math.floor(data.count / 1024);
+            div.style.backgroundColor = hide ? '#393' : '#09f';
+            div.innerHTML = data.count || 0;
+            var marker = new AMap.Marker({
+                content: div,
+                title: data.name,
+                position: data.center.split(','),
+                offset: new AMap.Pixel(-24, 5),
+                zIndex: data.count
+            });
+            marker.subMarkers = [];
+            if (data.name === '北京市' || data.name === '河南省') {
+                marker.setLabel({
+                    content: '&larr;请点击',
+                    offset: new AMap.Pixel(45, 0)
+                })
+                map.setCenter(marker.getPosition());
+            }
+            if (!hide) {
+                marker.setMap(map)
+            }
+            if (data.subDistricts && data.subDistricts.length) {
+                for (var i = 0; i < data.subDistricts.length; i += 1) {
+                    marker.subMarkers.push(createMarker(data.subDistricts[i], true));
+                }
+            }
+            return marker;
+        }
+        var _onZoomEnd = function (e) {
+            if (map.getZoom() < 6) {
+                for (var i = 0; i < markers.length; i += 1) {
+                    map.remove(markers[i].subMarkers)
+                }
+                map.add(markers);
+            }
+        }
+        var _onClick = function (e) {
+            if (e.target.subMarkers.length) {
+                map.add(e.target.subMarkers);
+                map.setFitView(e.target.subMarkers);
+                map.remove(markers)
+            }
+        }
+        var markers = []; //province见Demo引用的JS文件
+        for (var i = 0; i < provinces.length; i += 1) {
+            var marker = createMarker(provinces[i]);
+            markers.push(marker);
+            AMap.event.addListener(marker, 'click', _onClick);
+        }
+        //map.setFitView();
+        AMap.event.addListener(map, 'zoomend', _onZoomEnd);
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+</body>
 
-    //实例化信息窗体
-    var title = '方恒假日酒店<span style="font-size:11px;color:#F00;">价格:318</span>',
-        content = [];
-    content.push("<img src='https://tpc.googlesyndication.com/simgad/5843493769827749134'>地址：北京市朝阳区阜通东大街6号院3号楼东北8.3公里");
-    content.push("电话：010-64733333");
-    content.push("<a href='https://ditu.amap.com/detail/B000A8URXB?citycode=110105'>详细信息</a>");
-    var infoWindow = new AMap.InfoWindow({
-        isCustom: true,  //使用自定义窗体
-        content: createInfoWindow(title, content.join("<br/>")),
-        offset: new AMap.Pixel(16, -45)
-    });
-
-    //构建自定义信息窗体
-    function createInfoWindow(title, content) {
-        var info = document.createElement("div");
-        info.className = "info";
-
-        //可以通过下面的方式修改自定义窗体的宽高
-        //info.style.width = "400px";
-        // 定义顶部标题
-        var top = document.createElement("div");
-        var titleD = document.createElement("div");
-        var closeX = document.createElement("img");
-        top.className = "info-top";
-        titleD.innerHTML = title;
-        closeX.src = "https://webapi.amap.com/images/close2.gif";
-        closeX.onclick = closeInfoWindow;
-
-        top.appendChild(titleD);
-        top.appendChild(closeX);
-        info.appendChild(top);
-
-        // 定义中部内容
-        var middle = document.createElement("div");
-        middle.className = "info-middle";
-        middle.style.backgroundColor = 'white';
-        middle.innerHTML = content;
-        info.appendChild(middle);
-
-        // 定义底部内容
-        var bottom = document.createElement("div");
-        bottom.className = "info-bottom";
-        bottom.style.position = 'relative';
-        bottom.style.top = '0px';
-        bottom.style.margin = '0 auto';
-        var sharp = document.createElement("img");
-        sharp.src = "https://webapi.amap.com/images/sharp.png";
-        bottom.appendChild(sharp);
-        info.appendChild(bottom);
-        return info;
-    }
-
-    //关闭信息窗体
-    function closeInfoWindow() {
-        map.clearInfoWindow();
-    }
-</script>
-<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
-<script type='text/javascript'>
-	var mock = {
-		log: function(result) {
-			window.parent.setIFrameResult('log', result);
-		}
-	}
-	console = mock;
-	window.Konsole = {
-		exec: function(code) {
-			code = code || '';
-			try {
-				var result = window.eval(code);
-				window.parent.setIFrameResult('result', result);
-			} catch (e) {
-				window.parent.setIFrameResult('error', e);
-			}
-		}
-	}
-</script></body>
 </html>
