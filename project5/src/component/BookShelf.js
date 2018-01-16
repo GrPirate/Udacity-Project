@@ -8,42 +8,46 @@ class BookShelf extends Component{
         headTitle: 'MyReads',
         currentTitle: 'Currently Reading',
         wantTitle: 'Want To Read',
-        readTitle: 'Read'
+        readTitle: 'Read',
+        books: []
     }
     render() {
-        return (
-            <div className="list-books">
-              <Head title={this.state.headTitle}/>
-            <div className="list-books-content">
-              <div>
-                <ListBooks
-                  title={this.state.currentTitle}
-                  books={this.props.books.filter((book) => book.shelf === 'currentlyReading')}
-                  onUpdateShelf={(book, shelf) => {
-                    this.props.onUpdateShelf(book, shelf)
-                  }}
-                />
-                <ListBooks
-                  title={this.state.wantTitle}
-                  books={this.props.books.filter((book) => book.shelf === 'wantToRead')}
-                  onUpdateShelf={(book, shelf) => {
-                    this.props.onUpdateShelf(book, shelf)
-                  }}
-                />
-                <ListBooks
-                  title={this.state.readTitle}
-                  books={this.props.books.filter((book) => book.shelf === 'read')}
-                  onUpdateShelf={(book, shelf) => {
-                    this.props.onUpdateShelf(book, shelf)
-                  }}
-                />
-              </div>
-            </div>
-            <div className="open-search">
-              <Link to="/addbook">Add a book</Link>
+      const { headTitle, currentTitle, wantTitle, readTitle } = this.state
+      let books = this.props.books
+      console.log(books)
+      return (
+        <div className="list-books">
+          <Head title={headTitle} />
+          <div className="list-books-content">
+            <div>
+              <ListBooks
+                title={currentTitle}
+                books={books.filter((book) => book.shelf === 'currentlyReading')}
+                onUpdateShelf={(book, shelf) => {
+                  this.props.onUpdateShelf(book, shelf)
+                }}
+              />
+              <ListBooks
+                title={wantTitle}
+                books={books.filter((book) => book.shelf === 'wantToRead')}
+                onUpdateShelf={(book, shelf) => {
+                  this.props.onUpdateShelf(book, shelf)
+                }}
+              />
+              <ListBooks
+                title={readTitle}
+                books={books.filter((book) => book.shelf === 'read')}
+                onUpdateShelf={(book, shelf) => {
+                  this.props.onUpdateShelf(book, shelf)
+                }}
+              />
             </div>
           </div>
-        )
+          <div className="open-search">
+            <Link to="/addbook">Add a book</Link>
+          </div>
+        </div>
+      )
     }
 }
 
