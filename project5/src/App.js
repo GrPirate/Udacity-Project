@@ -6,6 +6,7 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 
 class BooksApp extends Component {
+
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -34,9 +35,7 @@ class BooksApp extends Component {
    */
   updateShelf(book, shelf) {
     BooksAPI.update(book, shelf)
-      .then(res => {
-        console.log(res)
-       return BooksAPI.getAll()})
+      .then(res => BooksAPI.getAll())
       .then((books) => {
         this.setState({ books })
       })
@@ -45,18 +44,27 @@ class BooksApp extends Component {
   searchBook(query){
     BooksAPI.search(query)
     .then((books)=>{
-      console.log(books)
       this.setState({
         searchBooks: books
       })
     })
   }
+
   render() {
+
+    let { books = [], searchBooks = [] } = this.state
+
+    // books不为数组时重新赋值
+    if (!Array.isArray(books))
+      books = []
+    if (!Array.isArray(searchBooks))
+      searchBooks = [] 
+    
     return (
       <div className="app">
         <Route exact path="/" render={() => (
           <BookShelf
-            books={this.state.books}
+            books={books}
             onUpdateShelf={(book, shelf) => {
               this.updateShelf(book, shelf)
             }}
@@ -64,7 +72,7 @@ class BooksApp extends Component {
         )} />
         <Route path="/addbook" render={({history}) => (
           <AddBook
-            books={this.state.searchBooks}
+            books={searchBooks}
             onSearchBook={(query) =>{
               this.searchBook(query)
             }}
