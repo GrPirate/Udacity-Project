@@ -38,7 +38,7 @@
 
       <div class="list-group map-content-list" id="listid">
         <!-- ko foreach: list -->
-        <a href="#" class="list-group-item" data-bind="click: function(data,e){showMakerByIndex(data,e,$index)}">
+        <a href="#" class="list-group-item" data-bind="click: $parent.showDetail">
           <h4 class="list-group-item-heading" data-bind="text:name"></h4>
           <p class="list-group-item-text" data-bind="text:address"></p>
         </a>

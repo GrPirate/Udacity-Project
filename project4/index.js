@@ -41,13 +41,14 @@ AMap.service('AMap.PlaceSearch', function () {
     });
 })
 search();
+
 function search(key = '') {
+    vm.list([]);
     placeSearch.searchNearBy(key, [114.337611, 30.487903], 500, function (status, result) {
         if (status === 'complete' && result.info === 'OK') {
             // keywordSearch_CallBack(result);
             console.log(status, result);
             search_callback(result);
-            vm.list(result.poiList.pois);
         }
     });
 }
@@ -64,7 +65,9 @@ function search_callback(data) {
     var resultCount = poiArr.length;
     for (var i = 0; i < resultCount; i++) {
         var mar = addmarker(i, poiArr[i]);
+        poiArr[i].marker = mar;
         markers.push(mar);
+        vm.list.push(poiArr[i])
         AMap.event.addListener(mar, 'click', _onClick);
     }
     map.setFitView();
@@ -132,11 +135,11 @@ function AppViewModel() {
         },
         owner: this
     });
-
-    // this.showDetail = function (data,e) {
-    //     // showMakerByIndex(idx);
-    //     console.log(data,e);
-    // }
+    this.showDetail = function (data) {
+        map.remove(markers);
+        map.add(data.marker);
+        map.setFitView(data.marker);
+    }
 }
 
 
@@ -155,8 +158,8 @@ function _onClick(e) {
     map.setFitView(e.target);
 }
 
-function showMakerByIndex(data,e) {
-    console.log(data,e);
+function showMakerByIndex(data, e) {
+    console.log(data, e);
     // map.remove(markers);
     // map.add(markers[idx]);
     // map.setFitView(markers[idx]);
