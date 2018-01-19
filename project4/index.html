@@ -32,11 +32,11 @@
   <div class="container-fluid">
     <div class="map-sider">
       <div>
-        <input type="email" class="form-control" id="inputEmail3" placeholder="input" data-bind="textInput: placeName">
-        <span class="glyphicon glyphicon-search map-search" aria-hidden="true"></span>
+        <input type="email" class="form-control" id="inputEmail3" placeholder="input" data-bind="textInput: placeName,click: toggleList">
+        <!-- <span class="glyphicon glyphicon-search map-search" aria-hidden="true"></span> -->
       </div>
 
-      <div class="list-group map-content-list" id="listid">
+      <div class="list-group map-content-list" id="listid" data-bind="visible: toggle">
         <!-- ko foreach: list -->
         <a href="#" class="list-group-item" data-bind="click: $parent.showDetail">
           <h4 class="list-group-item-heading" data-bind="text:name"></h4>
@@ -58,7 +58,14 @@
 
 </html>
 <script>
-  var cw = document.documentElement.clientHeight;
+  var getListHeight = function () {
+    if (document.documentElement.clientHeight)
+      return document.documentElement.clientHeight;
+    return 0;
+  }
   var lid = document.getElementById("listid");
-  lid.style.maxHeight = (cw - 200) + "px";
+  lid.style.maxHeight = (getListHeight() - 150) + "px";
+  window.onresize=function(){
+    lid.style.maxHeight = (getListHeight() - 150) + "px";
+  }
 </script>
