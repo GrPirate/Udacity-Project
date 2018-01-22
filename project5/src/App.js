@@ -14,6 +14,7 @@ class BooksApp extends Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
+    showLoading:false,
     books: [],
     searchBooks: []
   }
@@ -22,9 +23,11 @@ class BooksApp extends Component {
    * 组件插入DOM后立即调用
    */
   componentDidMount() {
+    this.setState({showLoading:true});
     BooksAPI.getAll().then((books) => {
       console.log(books)
       this.setState({ books })
+      this.setState({showLoading:false});
     })
   }
 
@@ -34,25 +37,29 @@ class BooksApp extends Component {
    * @param {*String} shelf 书架分类
    */
   updateShelf(book, shelf) {
+    this.setState({showLoading:true});
     BooksAPI.update(book, shelf)
       .then(res => BooksAPI.getAll())
       .then((books) => {
         this.setState({ books })
+        this.setState({showLoading:false});
       })
   }
 
   searchBook(query){
+    this.setState({showLoading:true});
     BooksAPI.search(query)
     .then((books)=>{
       this.setState({
         searchBooks: books
       })
+      this.setState({showLoading:false});
     })
   }
 
   render() {
 
-    let { books = [], searchBooks = [] } = this.state
+    let { showLoading, books = [], searchBooks = [] } = this.state
 
     // books不为数组时重新赋值
     if (!Array.isArray(books))
@@ -64,6 +71,7 @@ class BooksApp extends Component {
       <div className="app">
         <Route exact path="/" render={() => (
           <BookShelf
+            showLoading={showLoading}
             books={books}
             onUpdateShelf={(book, shelf) => {
               this.updateShelf(book, shelf)
@@ -72,6 +80,8 @@ class BooksApp extends Component {
         )} />
         <Route path="/addbook" render={({history}) => (
           <AddBook
+            showLoading={showLoading}
+            selfBooks={books}
             books={searchBooks}
             onSearchBook={(query) =>{
               this.searchBook(query)

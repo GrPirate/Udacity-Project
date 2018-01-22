@@ -3,19 +3,22 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Head from './common/Head'
 import ListBooks from './common/ListBooks'
+import Loading from './common/Loading'
 
 class BookShelf extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      headTitle: 'MyReads',
+      currentTitle: 'Currently Reading',
+      wantTitle: 'Want To Read',
+      readTitle: 'Read'
+    }
+  }
 
   static propTypes = {
     books: PropTypes.array.isRequired,
     onUpdateShelf: PropTypes.func.isRequired
-  }
-
-  state = {
-    headTitle: 'MyReads',
-    currentTitle: 'Currently Reading',
-    wantTitle: 'Want To Read',
-    readTitle: 'Read'
   }
 
   render() {
@@ -25,6 +28,7 @@ class BookShelf extends Component{
     
     return (
       <div className="list-books">
+        {this.props.showLoading?(<Loading/>):('')}
         <Head title={headTitle} />
         <div className="list-books-content">
           <div>
