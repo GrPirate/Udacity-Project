@@ -20,21 +20,28 @@ class Books extends Component{
 
     render() {
         
-        const { books } = this.props
-        
+        const { books } = this.props;
+
+        const BookCoverStyle = (book) => {
+            return {
+                width: 128,
+                height: 193,
+                backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+            }
+        }
         return (
             <ol className="books-grid">
-                {books.map((book) => (
+                {books.map((book) =>(
                     <li key={book.id}>
                         <div className="book">
                             <div className="book-top">
-                                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+                                <div className="book-cover" style={BookCoverStyle(book)}></div>
                                 <div className="book-shelf-changer">
                                     <select
                                         onChange={(e)=>this.handleMove(e,book)}
                                         value={book.shelf}
                                     >
-                                        <option value="none" disabled checked>Move to...</option>
+                                        <option value="moveTo" disabled checked>Move to...</option>
                                         <option value="none">None</option>
                                         <option value="currentlyReading">Currently Reading</option>
                                         <option value="wantToRead">Want to Read</option>

@@ -28,7 +28,7 @@ class BookShelf extends Component{
     
     return (
       <div className="list-books">
-        {this.props.showLoading?(<Loading/>):('')}
+        {this.props.showLoading && <Loading/>}
         <Head title={headTitle} />
         <div className="list-books-content">
           <div>

@@ -44,7 +44,7 @@ class AddBook extends Component {
 
         return (
             <div className="search-books">
-                {showLoading?(<Loading/>):('')}
+                {showLoading && <Loading/>}
                 <div className="search-books-bar">
                 <Link className="close-search" to="/">Close</Link>
                 <div className="search-books-input-wrapper">
