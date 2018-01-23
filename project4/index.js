@@ -9,6 +9,7 @@ var mapView = {
          * 显示地图
          */
         map = new AMap.Map('container', {
+            mapStyle: 'amap://styles/light',//样式URL
             resizeEnable: true,
             zoom: 15,
             center: [114.333652, 30.489841] // 地图中心点
@@ -28,8 +29,8 @@ var mapView = {
 
         AMap.service('AMap.PlaceSearch', function () {
             placeSearch = new AMap.PlaceSearch({
-                pageSize: 100,
-                type: "餐饮服务",
+                pageSize: 20,
+                type: "风景名胜",
                 city: "武汉"
             });
         })
@@ -72,15 +73,20 @@ var mapOctopus = {
     init: function () {
         mapView.init();
         this.search()
-            .then((res) => mapOctopus.search_callback(res));;
+            .then((res) => mapOctopus.search_callback(res))
+            .catch((e)=>{
+                throw new Error(e);
+            });
     },
     search: function (key = '') {
         vm.list([]);
-        return new Promise((resolve) => {
-            placeSearch.searchNearBy(key, [114.337611, 30.487903], 500, function (status, result) {
+        return new Promise((resolve,reject) => {
+            placeSearch.searchNearBy(key, [114.337611, 30.487903], 5000, function (status, result) {
                 if (status === 'complete' && result.info === 'OK') {
                     // keywordSearch_CallBack(result);
                     resolve(result);
+                }else{
+                    reject('查询失败');
                 }
             });
         })
@@ -117,7 +123,6 @@ var mapOctopus = {
             animation: "AMAP_ANIMATION_DROP"
         };
         var mar = new AMap.Marker(markerOption);
-
         var infoWindow = new AMap.InfoWindow({
             content: "<h3><font color=\"#00a6ac\">  " + (i + 1) + ". " + d.name + "</font></h3>" + this.createContent(d.type, d.address, d.tel),
             autoMove: true,
